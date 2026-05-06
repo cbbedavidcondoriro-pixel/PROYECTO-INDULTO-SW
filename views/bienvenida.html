@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bienvenida - Sistema Penitenciario</title>
+
+<!-- Leaflet (MAPA) -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+
+<style>
+    *{
+        margin:0;
+        padding:0;
+        box-sizing:border-box;
+        font-family:'Roboto', sans-serif;
+    }
+
+    body{
+        background: radial-gradient(circle at top, #0f172a, #020617);
+        color:#fff;
+        min-height:100vh;
+    }
+
+    header{
+        text-align:center;
+        padding:30px 20px;
+        background: rgba(0,0,0,0.4);
+        border-bottom: 2px solid #22c55e;
+    }
+
+    header h1{
+        font-size:32px;
+        color:#22c55e;
+        letter-spacing:2px;
+    }
+
+    header p{
+        margin-top:8px;
+        color:#cbd5e1;
+        font-size:14px;
+    }
+
+    .container{
+        display:grid;
+        grid-template-columns:2fr 1fr;
+        gap:20px;
+        padding:25px;
+    }
+
+    .card{
+        background: rgba(255,255,255,0.05);
+        border:1px solid rgba(255,255,255,0.1);
+        border-radius:15px;
+        padding:20px;
+        box-shadow:0 10px 30px rgba(0,0,0,0.5);
+        backdrop-filter: blur(8px);
+    }
+
+    .card h2{
+        color:#22c55e;
+        margin-bottom:15px;
+        font-size:20px;
+    }
+
+    iframe{
+        width:100%;
+        height:320px;
+        border-radius:12px;
+    }
+
+    #map{
+        width:100%;
+        height:320px;
+        border-radius:12px;
+        z-index:1;
+    }
+
+    .info p{
+        margin:8px 0;
+        color:#e2e8f0;
+    }
+
+    .turno ul{
+        list-style:none;
+        margin-top:10px;
+    }
+
+    .turno li{
+        background: rgba(34,197,94,0.15);
+        margin-bottom:10px;
+        padding:10px;
+        border-radius:10px;
+        border-left:3px solid #22c55e;
+    }
+
+    .btn{
+        display:block;
+        text-align:center;
+        margin-top:15px;
+        padding:12px;
+        background:#22c55e;
+        color:#000;
+        font-weight:bold;
+        border-radius:10px;
+        text-decoration:none;
+        transition:0.3s;
+    }
+
+    .btn:hover{
+        background:#16a34a;
+        transform:scale(1.03);
+    }
+
+    .footer{
+        text-align:center;
+        padding:15px;
+        color:#94a3b8;
+        font-size:12px;
+    }
+
+    @media(max-width:900px){
+        .container{
+            grid-template-columns:1fr;
+        }
+    }
+</style>
+</head>
+<body>
+
+<header>
+    <h1>SISTEMA PENITENCIARIO BOLIVIA</h1>
+    <p>Plataforma de control, gestión de reclusos e indultos</p>
+</header>
+
+<div class="container">
+
+    <!-- VIDEO -->
+    <div class="card">
+        <h2>🎥 Video Institucional</h2>
+        <iframe src="https://www.youtube.com/embed/YHiV88hI08A" frameborder="0" allowfullscreen></iframe>
+    </div>
+
+    <!-- MAPA REAL -->
+    <div class="card">
+        <h2>📍 Ubicación del Penal</h2>
+        <div id="map"></div>
+    </div>
+
+    <!-- INFO -->
+    <div class="card info">
+        <h2>🏛️ Información del Penal</h2>
+        <p><strong>Ubicación:</strong> Cochabamba, Bolivia</p>
+        <p><strong>Institución:</strong> Centro Penitenciario de Seguridad Media</p>
+        <p><strong>Capacidad:</strong> 1200 internos</p>
+        <p><strong>Objetivo:</strong> Control de reclusos, visitas e indultos</p>
+        <p><strong>Estado:</strong> Operativo 24/7</p>
+    </div>
+
+    <!-- TURNO -->
+    <div class="card turno">
+        <h2>👮 Personal de Turno</h2>
+        <ul>
+            <li>Oficial Juan Pérez</li>
+            <li>Oficial Carlos Rojas</li>
+            <li>Suboficial Ana Mamani</li>
+        </ul>
+    </div>
+
+    <!-- ACCESO -->
+    <div class="card">
+        <h2>🔐 Acceso al Sistema</h2>
+        <p>Ingrese al sistema para gestión penitenciaria y control de indultos.</p>
+        <a href="/login" class="btn">INGRESAR AL SISTEMA</a>
+    </div>
+
+</div>
+
+<div class="footer">
+    © 2026 Sistema Penitenciario - Proyecto académico
+</div>
+
+<!-- SCRIPT MAPA -->
+<script>
+    var map = L.map('map').setView([-17.39798332331313, -66.16001989294051], 13); // Cochabamba
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap'
+    }).addTo(map);
+
+    L.marker([-17.39798332331313, -66.16001989294051]).addTo(map)
+        .bindPopup('Centro Penitenciario (Referencia)')
+        .openPopup();
+</script>
+
+</body>
+</html>

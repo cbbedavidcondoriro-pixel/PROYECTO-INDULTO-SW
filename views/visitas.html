@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Visitas</title>
+
+    <style>
+        body{
+            background:#0a0f1c;
+            color:white;
+            font-family:Arial;
+            padding:20px;
+        }
+
+        .box{
+            background:#111827;
+            padding:20px;
+            border-radius:10px;
+            margin-bottom:20px;
+        }
+
+        input, select{
+            padding:10px;
+            margin:5px;
+        }
+
+        button{
+            padding:10px;
+            background:#22c55e;
+            border:none;
+            cursor:pointer;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+        }
+
+        th,td{
+            border:1px solid #333;
+            padding:10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<h2>Registro de Visitas</h2>
+
+<div class="box">
+    <form method="POST" action="/visitas/agregar">
+
+        <input type="text" name="nombre" placeholder="Nombre visitante" required>
+        <input type="text" name="ci" placeholder="CI" required>
+
+        <select name="id_reo">
+            {% for r in reos %}
+            <option value="{{ r[0] }}">{{ r[1] }}</option>
+            {% endfor %}
+        </select>
+
+        <input type="date" name="fecha" required>
+
+        <input type="text" name="parentesco" placeholder="Parentesco">
+
+        <button>Registrar</button>
+    </form>
+</div>
+
+<div class="box">
+    <h3>Lista de Visitas</h3>
+
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Visitante</th>
+            <th>CI</th>
+            <th>Reo</th>
+            <th>Fecha</th>
+            <th>Parentesco</th>
+        </tr>
+
+        {% for v in visitas %}
+        <tr>
+            <td>{{ v[0] }}</td>
+            <td>{{ v[1] }}</td>
+            <td>{{ v[2] }}</td>
+            <td>{{ v[3] }}</td>
+            <td>{{ v[4] }}</td>
+            <td>{{ v[5] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+</body>
+</html>

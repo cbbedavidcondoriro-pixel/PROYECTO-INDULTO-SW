@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Indultos</title>
+
+<style>
+body{
+    font-family: Arial;
+    background:#0f172a;
+    color:white;
+    margin:0;
+    padding:20px;
+}
+
+h1{
+    color:#22c55e;
+}
+
+.container{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+.card{
+    background:rgba(255,255,255,0.05);
+    padding:20px;
+    border-radius:12px;
+}
+
+input, textarea, select{
+    width:100%;
+    padding:10px;
+    margin:10px 0;
+    border-radius:8px;
+    border:none;
+}
+
+button{
+    background:#22c55e;
+    padding:10px;
+    border:none;
+    width:100%;
+    border-radius:8px;
+    font-weight:bold;
+}
+
+table{
+    width:100%;
+    margin-top:10px;
+    border-collapse:collapse;
+}
+
+td, th{
+    padding:10px;
+    border-bottom:1px solid #333;
+}
+
+.estado{
+    padding:5px 10px;
+    border-radius:8px;
+    font-size:12px;
+}
+
+.pendiente{background:orange;}
+.aprobado{background:green;}
+.rechazado{background:red;}
+</style>
+
+</head>
+<body>
+
+<h1>Gestión de Indultos</h1>
+
+<!-- 🔥 ESTADÍSTICAS -->
+<div class="container">
+
+<div class="card">
+    <h2>Total</h2>
+    <h1>{{ total }}</h1>
+</div>
+
+<div class="card">
+    <h2>Pendientes</h2>
+    <h1>{{ pendientes }}</h1>
+</div>
+
+<div class="card">
+    <h2>Aprobados</h2>
+    <h1>{{ aprobados }}</h1>
+</div>
+
+<div class="card">
+    <h2>Rechazados</h2>
+    <h1>{{ rechazados }}</h1>
+</div>
+
+</div>
+
+<br>
+
+<div class="container">
+
+<!-- 🔵 FORMULARIO -->
+<div class="card">
+    <h2>Nueva Solicitud</h2>
+
+    <form method="POST">
+
+        <!-- ✔ SELECT PROFESIONAL -->
+        <select name="id_interno" required>
+            <option value="">Seleccionar interno</option>
+
+            {% for r in internos %}
+                <option value="{{ r[0] }}">
+                    {{ r[1] }} {{ r[2] }} - CI: {{ r[3] }} - {{ r[4] }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <textarea name="motivo" placeholder="Motivo del indulto" required></textarea>
+
+        <button type="submit">Solicitar Indulto</button>
+    </form>
+</div>
+
+<!-- 🔴 TABLA PRO -->
+<div class="card">
+    <h2>Solicitudes</h2>
+
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Interno</th>
+            <th>CI</th>
+            <th>Delito</th>
+            <th>Motivo</th>
+            <th>Estado</th>
+            <th>Fecha</th>
+        </tr>
+
+        {% for i in indultos %}
+        <tr>
+            <td>{{ i[0] }}</td>
+            <td>{{ i[1] }}</td>
+            <td>{{ i[2] }}</td>
+            <td>{{ i[3] }}</td>
+            <td>{{ i[4] }}</td>
+            <td>
+                <span class="estado {{ i[5] }}">{{ i[5] }}</span>
+            </td>
+            <td>{{ i[6] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+</div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Indulto - Dashboard</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial;
+        }
+
+        body{
+            background:#0a0f1c;
+            color:white;
+        }
+
+        .sidebar{
+            position:fixed;
+            width:260px;
+            height:100vh;
+            background:#0f172a;
+            padding:25px;
+            border-right:1px solid #1f2937;
+        }
+
+        .logo{
+            font-size:22px;
+            font-weight:bold;
+            color:#22c55e;
+            margin-bottom:30px;
+        }
+
+        .menu a{
+            display:flex;
+            align-items:center;
+            gap:10px;
+            padding:12px;
+            margin:8px 0;
+            text-decoration:none;
+            color:white;
+            background:#111827;
+            border-radius:10px;
+            transition:0.3s;
+            cursor:pointer;
+        }
+
+        .menu a:hover{
+            background:#22c55e;
+            color:black;
+        }
+
+        .content{
+            margin-left:280px;
+            padding:25px;
+        }
+
+        .topbar{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-bottom:25px;
+        }
+
+        .search input{
+            padding:10px;
+            width:250px;
+            border:none;
+            border-radius:8px;
+            background:#111827;
+            color:white;
+        }
+
+        .user{
+            background:#111827;
+            padding:10px 15px;
+            border-radius:10px;
+        }
+
+        .title{
+            font-size:28px;
+            font-weight:bold;
+            margin-bottom:20px;
+        }
+
+        .cards{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+            gap:20px;
+        }
+
+        .card{
+            padding:20px;
+            border-radius:15px;
+            background:linear-gradient(135deg,#111827,#0f172a);
+            border:1px solid #1f2937;
+        }
+
+        .icon{
+            font-size:24px;
+            color:#22c55e;
+        }
+
+        .number{
+            font-size:32px;
+            margin-top:10px;
+            font-weight:bold;
+        }
+
+        .label{
+            color:#9ca3af;
+        }
+
+        .box{
+            background:#111827;
+            padding:20px;
+            border-radius:15px;
+            margin-top:20px;
+        }
+
+        canvas{
+            background:#0f172a;
+            border-radius:10px;
+            padding:10px;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+            margin-top:10px;
+        }
+
+        th,td{
+            border:1px solid #333;
+            padding:10px;
+        }
+
+        th{
+            background:#1f2937;
+        }
+
+        input, select, textarea{
+            padding:8px;
+            margin:5px;
+            background:#0f172a;
+            color:white;
+            border:none;
+            border-radius:5px;
+        }
+
+        button{
+            padding:8px;
+            background:#22c55e;
+            border:none;
+            cursor:pointer;
+        }
+
+        .hidden{
+            display:none;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="sidebar">
+    <div class="logo">
+        <i class="fa-solid fa-building-shield"></i> INDULTO SYS
+    </div>
+
+    <div class="menu">
+        <a onclick="showSection('dashboard')"><i class="fa-solid fa-gauge"></i> Dashboard</a>
+        <a onclick="showSection('reos')"><i class="fa-solid fa-user"></i> Reos</a>
+        <a onclick="showSection('visitas')"><i class="fa-solid fa-handshake"></i> Visitas</a>
+
+        <!-- ✔ SOLO CORREGIDO -->
+        <a onclick="showSection('indultos')">
+            <i class="fa-solid fa-scale-balanced"></i> Indultos
+        </a>
+
+        <a><i class="fa-solid fa-file"></i> Reportes</a>
+    </div>
+</div>
+
+<div class="content">
+
+    <div class="topbar">
+        <div class="search">
+            <input type="text" placeholder="Buscar...">
+        </div>
+
+        <div class="user">
+            Admin
+        </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div id="dashboard">
+
+        <div class="title">Panel Inteligente</div>
+
+        <div class="cards">
+            <div class="card">
+                <div class="icon"><i class="fa-solid fa-users"></i></div>
+                <div class="label">Total Reos</div>
+                <div class="number">{{ total_reos }}</div>
+            </div>
+
+            <div class="card">
+                <div class="icon"><i class="fa-solid fa-user-shield"></i></div>
+                <div class="label">Usuarios</div>
+                <div class="number">{{ total_usuarios }}</div>
+            </div>
+
+            <div class="card">
+                <div class="icon"><i class="fa-solid fa-calendar"></i></div>
+                <div class="label">Visitas</div>
+                <div class="number">{{ visitas|length }}</div>
+            </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:2fr 1fr;gap:20px;">
+
+            <div class="box">
+                <h3>Estadísticas</h3>
+                <canvas id="grafica1" style="max-height:200px;"></canvas>
+            </div>
+
+            <div class="box">
+                <h3>Alertas</h3>
+
+                {% for r in reos[:5] %}
+                <p>🔸 {{ r[1] }} {{ r[6] }}</p>
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+        <div class="box">
+            <h3>Actividad Reciente</h3>
+
+            <table>
+                <tr>
+                    <th>Visitante</th>
+                    <th>Reo</th>
+                    <th>Fecha</th>
+                </tr>
+
+                {% for v in visitas[:5] %}
+                <tr>
+                    <td>{{ v[1] }}</td>
+                    <td>{{ v[3] }}</td>
+                    <td>{{ v[4] }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+    </div>
+
+    <!-- REOS -->
+    <div id="reos" class="hidden">
+        <h2>Gestión de Reos</h2>
+
+        <div class="box">
+            <form method="POST" action="/reos/agregar">
+                <input name="nombre" placeholder="Nombre" required>
+                <input name="apellido" placeholder="Apellido" required>
+                <input name="ci" placeholder="CI" required>
+                <input name="delito" placeholder="Delito" required>
+                <input type="date" name="fecha" required>
+                <input type="number" name="tiempo" placeholder="Años condena" required>
+
+                <select name="estado">
+                    <option value="Activo">Activo</option>
+                    <option value="Liberado">Liberado</option>
+                </select>
+
+                <button>Agregar</button>
+            </form>
+        </div>
+
+        <div class="box">
+            <table>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>CI</th>
+                    <th>Delito</th>
+                    <th>Acción</th>
+                </tr>
+
+                {% for r in reos %}
+                <tr>
+                    <td>{{ r[0] }}</td>
+                    <td>{{ r[1] }} {{ r[6] }}</td>
+                    <td>{{ r[2] }}</td>
+                    <td>{{ r[3] }}</td>
+                    <td><a href="/reos/eliminar/{{ r[0] }}">Eliminar</a></td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+    <!-- VISITAS -->
+    <div id="visitas" class="hidden">
+        <h2>Registro de Visitas</h2>
+
+        <div class="box">
+            <form method="POST" action="/visitas/agregar">
+                <input name="nombre" placeholder="Visitante" required>
+                <input name="ci" placeholder="CI" required>
+
+                <select name="id_reo">
+                    {% for r in reos %}
+                    <option value="{{ r[0] }}">{{ r[1] }}</option>
+                    {% endfor %}
+                </select>
+
+                <input type="date" name="fecha" required>
+                <input name="parentesco" placeholder="Parentesco">
+
+                <button>Registrar</button>
+            </form>
+        </div>
+
+        <div class="box">
+            <table>
+                <tr>
+                    <th>Visitante</th>
+                    <th>CI</th>
+                    <th>Reo</th>
+                    <th>Fecha</th>
+                </tr>
+
+                {% for v in visitas %}
+                <tr>
+                    <td>{{ v[1] }}</td>
+                    <td>{{ v[2] }}</td>
+                    <td>{{ v[3] }}</td>
+                    <td>{{ v[4] }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+    <!-- INDULTOS -->
+    <div id="indultos" class="hidden">
+        <h2>Gestión de Indultos</h2>
+
+        <div class="box">
+            <form method="POST" action="/indultos/agregar">
+                <input name="id_interno" placeholder="ID Interno" required>
+                <textarea name="motivo" placeholder="Motivo del indulto" required></textarea>
+                <button>Solicitar Indulto</button>
+            </form>
+        </div>
+
+        <div class="box">
+            <table>
+                <tr>
+                    <th>ID</th>
+                    <th>Interno</th>
+                    <th>Fecha</th>
+                    <th>Estado</th>
+                </tr>
+
+                {% for i in indultos %}
+                <tr>
+                    <td>{{ i[0] }}</td>
+                    <td>{{ i[1] }}</td>
+                    <td>{{ i[2] }}</td>
+                    <td>{{ i[4] }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<script>
+function showSection(section){
+
+    document.getElementById("dashboard").style.display = "none";
+    document.getElementById("reos").style.display = "none";
+    document.getElementById("visitas").style.display = "none";
+    document.getElementById("indultos").style.display = "none";
+
+    document.getElementById(section).style.display = "block";
+}
+
+new Chart(document.getElementById('grafica1'), {
+    type: 'bar',
+    data: {
+        labels: ['Reos','Usuarios','Visitas'],
+        datasets: [{
+            data: [{{ total_reos }}, {{ total_usuarios }}, {{ visitas|length }}],
+            backgroundColor: ['#22c55e','#3b82f6','#f59e0b']
+        }]
+    }
+});
+</script>
+
+</body>
+</html>

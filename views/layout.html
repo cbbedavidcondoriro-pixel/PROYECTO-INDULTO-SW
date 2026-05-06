@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sistema Indulto</title>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial;
+        }
+
+        body{
+            background:#0a0f1c;
+            color:white;
+        }
+
+        .sidebar{
+            position:fixed;
+            width:260px;
+            height:100vh;
+            background:#0f172a;
+            padding:25px;
+            border-right:1px solid #1f2937;
+        }
+
+        .logo{
+            font-size:22px;
+            font-weight:bold;
+            color:#22c55e;
+            margin-bottom:30px;
+        }
+
+        .menu a{
+            display:flex;
+            align-items:center;
+            gap:10px;
+            padding:12px;
+            margin:8px 0;
+            text-decoration:none;
+            color:white;
+            background:#111827;
+            border-radius:10px;
+            transition:0.3s;
+        }
+
+        .menu a:hover{
+            background:#22c55e;
+            color:black;
+        }
+
+        .content{
+            margin-left:280px;
+            padding:25px;
+        }
+
+        .topbar{
+            display:flex;
+            justify-content:space-between;
+            margin-bottom:20px;
+        }
+
+        .user{
+            background:#111827;
+            padding:10px;
+            border-radius:10px;
+        }
+
+        .box{
+            background:#111827;
+            padding:20px;
+            border-radius:15px;
+            margin-top:20px;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+        }
+
+        th,td{
+            padding:10px;
+            border-bottom:1px solid #333;
+        }
+
+        th{
+            background:#1f2937;
+            color:#22c55e;
+        }
+
+        input, select{
+            padding:8px;
+            margin:5px;
+            background:#0f172a;
+            color:white;
+            border:none;
+            border-radius:5px;
+        }
+
+        button{
+            padding:8px;
+            background:#22c55e;
+            border:none;
+            cursor:pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="sidebar">
+    <div class="logo">
+        <i class="fa-solid fa-building-shield"></i> INDULTO SYS
+    </div>
+
+    <div class="menu">
+        <a href="/admin"><i class="fa-solid fa-gauge"></i> Dashboard</a>
+        <a href="/reos"><i class="fa-solid fa-user"></i> Reos</a>
+        <a href="/visitas"><i class="fa-solid fa-handshake"></i> Visitas</a>
+        <a href="#"><i class="fa-solid fa-scale-balanced"></i> Indultos</a>
+    </div>
+</div>
+
+<div class="content">
+
+    <div class="topbar">
+        <div>Panel Administrativo</div>
+        <div class="user">Admin</div>
+    </div>
+
+    {% block content %}{% endblock %}
+
+</div>
+
+</body>
+</html>

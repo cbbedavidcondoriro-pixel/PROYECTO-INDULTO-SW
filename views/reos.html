@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reos - Sistema Indulto</title>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        body{
+            margin:0;
+            font-family:Arial;
+            background:#0a0f1c;
+            color:white;
+        }
+
+        .content{
+            margin-left:280px;
+            padding:25px;
+        }
+
+        .title{
+            font-size:28px;
+            margin-bottom:20px;
+        }
+
+        /* BOTON VOLVER */
+        .back{
+            display:inline-block;
+            margin-bottom:15px;
+            padding:8px 12px;
+            background:#22c55e;
+            color:black;
+            border-radius:8px;
+            text-decoration:none;
+        }
+
+        /* FORM */
+        .form-box{
+            background:#111827;
+            padding:20px;
+            border-radius:15px;
+            margin-bottom:20px;
+            border:1px solid #1f2937;
+        }
+
+        .form-grid{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+            gap:10px;
+        }
+
+        input, select{
+            padding:10px;
+            border:none;
+            border-radius:8px;
+            background:#0f172a;
+            color:white;
+            width:100%;
+        }
+
+        button{
+            margin-top:10px;
+            padding:10px 15px;
+            background:#22c55e;
+            border:none;
+            border-radius:8px;
+            cursor:pointer;
+            width:200px;
+        }
+
+        /* TABLE */
+        table{
+            width:100%;
+            border-collapse:collapse;
+            background:#111827;
+            border-radius:15px;
+            overflow:hidden;
+        }
+
+        th,td{
+            padding:12px;
+            border-bottom:1px solid #1f2937;
+            text-align:left;
+        }
+
+        th{
+            background:#0f172a;
+            color:#22c55e;
+        }
+
+        .btn{
+            padding:6px 10px;
+            border-radius:6px;
+            text-decoration:none;
+        }
+
+        .delete{
+            background:red;
+            color:white;
+        }
+
+        .estado-activo{ color:#22c55e; }
+        .estado-liberado{ color:#facc15; }
+        .estado-traslado{ color:#38bdf8; }
+
+    </style>
+</head>
+
+<body>
+
+<div class="content">
+
+    <a href="/admin" class="back">
+        <i class="fa fa-arrow-left"></i> Volver al Dashboard
+    </a>
+
+    <div class="title">
+        <i class="fa-solid fa-users"></i> Gestión de Reos
+    </div>
+
+    <!-- FORMULARIO -->
+    <div class="form-box">
+        <form method="POST" action="/reos/agregar">
+
+            <div class="form-grid">
+                <input name="nombre" placeholder="Nombre" required>
+                <input name="apellido" placeholder="Apellido" required>
+                <input name="ci" placeholder="CI" required>
+
+                <input name="delito" placeholder="Delito" required>
+
+                <input type="date" name="fecha" required>
+
+                <input type="number" name="tiempo" placeholder="Años de condena" required>
+
+                <select name="estado">
+                    <option value="Activo">Activo</option>
+                    <option value="Liberado">Liberado</option>
+                    <option value="Traslado">Traslado</option>
+                </select>
+            </div>
+
+            <button>
+                <i class="fa fa-plus"></i> Agregar Reo
+            </button>
+
+        </form>
+    </div>
+
+    <!-- TABLA -->
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Nombre Completo</th>
+            <th>CI</th>
+            <th>Delito</th>
+            <th>Ingreso</th>
+            <th>Condena</th>
+            <th>Estado</th>
+            <th>Acción</th>
+        </tr>
+
+        {% for r in reos %}
+        <tr>
+            <td>{{ r[0] }}</td>
+
+            <td>{{ r[1] }} {{ r[2] }}</td>
+
+            <td>{{ r[3] }}</td>
+
+            <td>{{ r[4] }}</td>
+
+            <td>{{ r[5] }}</td>
+
+            <td>{{ r[6] }} años</td>
+
+            <td>
+                <span class="
+                    {% if r[7]=='Activo' %}estado-activo
+                    {% elif r[7]=='Liberado' %}estado-liberado
+                    {% else %}estado-traslado
+                    {% endif %}
+                ">
+                    {{ r[7] }}
+                </span>
+            </td>
+
+            <td>
+                <a class="btn delete" href="/reos/eliminar/{{ r[0] }}">
+                    <i class="fa fa-trash"></i> Eliminar
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+
+    </table>
+
+</div>
+
+</body>
+</html>
