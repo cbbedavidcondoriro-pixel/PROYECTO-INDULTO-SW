@@ -6,10 +6,10 @@ app = Flask(__name__, template_folder='views')
 # ======================
 # MYSQL CONFIG
 # ======================
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'david0309'
-app.config['MYSQL_DB'] = 'indulto_proyecto'
+app.config['MYSQL_HOST'] = 'bvryltt5bdfk7f8v1th0-mysql.services.clever-cloud.com'
+app.config['MYSQL_USER'] = 'untbcse1zlwvxrhp'
+app.config['MYSQL_PASSWORD'] = 'pbTThez6erY28TASpFoN'
+app.config['MYSQL_DB'] = 'bvryltt5bdfk7f8v1th0'
 
 app.secret_key = "indulto_secret"
 
